@@ -1,0 +1,10 @@
+# Dont' track content of these folders
+/build/
+
+# Compiled Source #
+###################
+*.exe
+*.o
+
+.vimrc
+CloxWorkspace.code-workspace
