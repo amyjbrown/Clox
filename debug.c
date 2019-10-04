@@ -11,7 +11,7 @@ Contents:
 
 void disassembleChunk(Chunk* chunk, const char* name) {
     // debug
-    printf("Dissasembling Chunk...\n");
+    // printf("Dissasembling Chunk...\n");
     printf ("chunk: count %d , capacity %d\n", chunk->count, chunk->capacity);
 
     printf("== %s ==\n", name);
@@ -32,9 +32,9 @@ static int simpleInstruction(const char* name, int offset) {
 
 static int constantInstruction(const char* name, Chunk* chunk, int offset) {
     uint8_t constant = chunk->code[offset+1];
-    printf("%-16s %4d'", name, constant);
+    printf("%-16s %4d\"", name, constant);
     printValue(chunk->constants.values[constant]);
-    prtinf("\n");
+    printf("\"\n");
 
     // Move forward Operator and Operand [2]
     return offset + 2;
@@ -42,14 +42,14 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
 
 int disassembleInstruction(Chunk* chunk, int offset) {
     //debug
-    printf("Dissassembling Instruction at %d\n", offset);
+    // printf("Dissassembling Instruction at %d\n", offset);
 
     printf("%04d ", offset);
     // Print line nmumber for now
     if (offset > 0 && chunk->lines[offset]== chunk->lines[offset-1]){
-        prtinf("   | ");
+        printf("   | ");
     } else {
-        prtinf("%4d ", chunk->lines[offset]);
+        printf("%4d ", chunk->lines[offset]);
     }
 
 
