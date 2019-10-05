@@ -13,13 +13,17 @@ Contenst:
 #include "chunk.h"
 #include "memory.h"
 
+//Line-Encoding
+
+
 
 void initChunk(Chunk* chunk) {
     // printf("Initializing chunk...\n");
     chunk->count = 0;
     chunk->capacity = 0;
     chunk->code = NULL;
-    chunk->lines = NULL;
+    // Implementation Dynamic Arrays
+    initLineArray(&chunk->lines);
     initValueArray(&chunk->constants);
 }
 
@@ -38,11 +42,10 @@ void writeChunk(Chunk* chunk, uint8_t byte, int line) {
         );
 
         // Reallocate line count
-        chunk->lines = GROW_ARRAY(chunk->lines, int, old_capacity, 
-        chunk->capacity);
+        updateLineArray(&chunk->lines, line, 1);
 
         // printf("Re-Writing Chunk- Count %d, Capacity %d->%d \n",
-        chunk->count, old_capacity, chunk->capacity;
+        // chunk->count, old_capacity, chunk->capacity;
 
     }
 
@@ -55,7 +58,7 @@ void writeChunk(Chunk* chunk, uint8_t byte, int line) {
 void freeChunk(Chunk* chunk) {
     // printf("Freeing chunk...\n");
     FREE_ARRAY(uint8_t, chunk->code, chunk->capacity);
-    FREE_ARRAY(int, chunk->lines, chunk->capacity);   
+    freeLineArray(&chunk->lines);
     freeValueArray(&chunk->constants);
     initChunk(chunk);
 }

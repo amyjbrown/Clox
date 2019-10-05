@@ -8,13 +8,14 @@ Contents:
 #include <stdio.h>
 #include "debug.h"
 #include "value.h"
+// #include "linearray.h"
 
 void disassembleChunk(Chunk* chunk, const char* name) {
     // debug
     // printf("Dissasembling Chunk...\n");
     printf ("chunk: count %d , capacity %d\n", chunk->count, chunk->capacity);
 
-    printf("== %s ==\n", name);
+    printf("===== %s =====\n", name);
     
     for (int offset=0; offset < chunk->count;) {
         // Increment the offset by the number of operands we consumed
