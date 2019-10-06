@@ -47,10 +47,11 @@ int disassembleInstruction(Chunk* chunk, int offset) {
 
     printf("%04d ", offset);
     // Print line nmumber for now
-    if (offset > 0 && chunk->lines[offset]== chunk->lines[offset-1]){
+    if (offset > 0 && 
+    getLine(&chunk->lines, offset)== getline(&chunk->lines, offset-1) ){
         printf("   | ");
     } else {
-        printf("%4d ", chunk->lines[offset]);
+        printf("%4d ", getLine(&chunk->lines, offset));
     }
 
 

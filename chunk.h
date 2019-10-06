@@ -36,9 +36,6 @@ void initChunk(Chunk* chunk);
 void writeChunk(Chunk* chunk, uint8_t byte, int line);
 void freeChunk(Chunk* chunk);
 
-//Debug uses
-int getLine(Chunk* chunk, int line) {}
-
 //Advanced
 int addConstant(Chunk* chunk, Value value);
 
