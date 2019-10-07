@@ -16,12 +16,28 @@ int main(int argc, const char* argv[]) {
     //Psuedo chunk 
     int constant = addConstant(&chunk, 1.2);
     writeChunk(&chunk, OP_CONSTANT, 123);
+    writeChunk(&chunk, constant, 123); 
+    //more code
+    constant = addConstant(&chunk, 3.4);    
+    writeChunk(&chunk, OP_CONSTANT, 123);   
     writeChunk(&chunk, constant, 123);
+
+    writeChunk(&chunk, OP_ADD, 123);        
+
+    constant = addConstant(&chunk, 5.6);    
+    writeChunk(&chunk, OP_CONSTANT, 123);   
+    writeChunk(&chunk, constant, 123);      
+
+    writeChunk(&chunk, OP_DIVIDE, 123);     
+
+
+    writeChunk(&chunk, OP_NEGATE, 123);
+
     writeChunk(&chunk, OP_RETURN, 123);
     
     // Testing and doing things
-    disassembleChunk(&chunk, "test chunk");
     interpret(&chunk);
+    disassembleChunk(&chunk, "test chunk");
 
     freeVM();
     freeChunk(&chunk);

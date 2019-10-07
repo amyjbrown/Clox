@@ -19,6 +19,11 @@ Contens:
 typedef enum {
     OP_RETURN,
     OP_CONSTANT,
+    OP_NEGATE,
+    OP_ADD,
+    OP_SUBSTRACT,
+    OP_MULPTIPLY,
+    OP_DIVIDE
 }   OpCode;
 
 // Dynamic Array Chunks

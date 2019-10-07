@@ -10,6 +10,8 @@
 #include <stddef.h> // Important for pointers!
 #include <stdint.h>
 
+#define DEBUG_TRACE_EXECUTION
+
 /* 
 Really tempted to do this for ease
 */
