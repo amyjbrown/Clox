@@ -5,6 +5,7 @@
 ###################
 *.exe
 *.o
+*.e
 
 .vimrc
 CloxWorkspace.code-workspace
