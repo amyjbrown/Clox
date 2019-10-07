@@ -44,11 +44,10 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
 int disassembleInstruction(Chunk* chunk, int offset) {
     //debug
     // printf("Dissassembling Instruction at %d\n", offset);
-
     printf("%04d ", offset);
     // Print line nmumber for now
     if (offset > 0 && 
-    getLine(&chunk->lines, offset)== getline(&chunk->lines, offset-1) ){
+    getLine(&chunk->lines, offset)== getLine(&chunk->lines, offset-1) ){
         printf("   | ");
     } else {
         printf("%4d ", getLine(&chunk->lines, offset));

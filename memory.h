@@ -14,10 +14,11 @@ Contents:
 
 Memory allocaiton of dynamic array:
 old         new         Operation
-0           Positive    Allocate new block
-Positive    0           Free allocation
-0           <Oldsize    Shrink allocation
-Positive    >Oldsize    Grow allocation
+-----------------------------------------
+0           Positive     Allocate new block
+Positive    0            Free allocation
+0           < Oldsize    Shrink allocation
+Positive    > Oldsize    Grow allocation
 */
 
 #ifndef clox_memory_h

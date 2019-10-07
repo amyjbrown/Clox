@@ -1,4 +1,15 @@
-# simplest possible makefile I can make
+# Makefile for building Clox
+# TBD as I make things work out better!
 
-clox:
-	gcc main.c chunk.c debug.c linearray.c memory.c value.c -o clox.exe
+##### Variables #####
+Compiler = gcc
+Source = main.c chunk.c debug.c linearray.c memory.c value.c
+Target = clox.exe
+Flags = -g -Wall
+
+##### Commands #####
+clox :
+	$(Compiler) $(Source) -o $(Target)
+
+debug :
+	$(Compiler) $(Flags) $(Source) -o clox-debug.exe
