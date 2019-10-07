@@ -21,8 +21,8 @@ int getLine(LineArray* array, int index) {
         }
 
     }
-    // If we haven't gotten here yet, return -1 as Error
-    return -1;
+    // If we haven't gotten here yet, return -2 as Error
+    return -2;
 }
 
 
@@ -54,7 +54,7 @@ void updateLineArray(LineArray* array, int line, int count) {
 
     int index = containsLine(array, line);
 
-    if (index != -1) { // IF Index is not Error Code
+    if (index != -2) { // IF Index is not Error Code
     // I think I fixed a bug here?
         //printf("Incrementing Line count");
         array->lineCount[index] += count;
