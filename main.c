@@ -18,8 +18,8 @@ static void repl(){
     for (;;) {
         printf("> ");
 
-        if (!fget(line, sizeof(line), stdin)) {
-            prtinf("\n");
+        if (!fgets(line, sizeof(line), stdin)) {
+            printf("\n");
             break;
         }
 
@@ -45,7 +45,7 @@ static char* readFile(const char* path) {
     char* buffer = (char*) malloc(fileSize + 1);
     // If we don't have space for the buffer, exit!
     if (buffer == NULL) {
-        fprtinf(stderr, "Not enough memory to read \"%s\".\n", path);
+        fprintf(stderr, "Not enough memory to read \"%s\".\n", path);
         exit(74);
     }
 
@@ -53,7 +53,7 @@ static char* readFile(const char* path) {
     size_t bytesRead = fread(buffer, sizeof(char), fileSize, file);
     // Check to see if Read failed
     if (bytesRead < fileSize) {
-        fprtinf(stderr, "Could not read file \"%s\".\n", path);
+        fprintf(stderr, "Could not read file \"%s\".\n", path);
         exit (74);
     }
 

@@ -52,6 +52,12 @@ static char peek() {
     return *scanner.current;
 }
 
+static char peekNext() {
+    if (isAtEnd()) return '\0';
+    return scanner.current[1]; // Returns the character current from next
+    // equivalent to ++(scanner.current)
+}
+
 static void skipWhiteSpace() {
     for (;;) {
         char c = peek();
@@ -91,6 +97,26 @@ static TokenType checkKeyword(int start, int length,
         return TOKEN_IDENTIFIER;
 }
 
+static Token errorToken(const char* message) {
+    Token token;
+    token.type = TOKEN_ERROR;
+    token.start = message;
+    token.length = (int) strlen(message);
+    token.line = scanner.line;
+    
+    return token;
+}
+
+static Token makeToken(TokenType type) {
+    Token token;
+    token.type = type;
+    token.start = scanner.start;
+    token.length = (int) (scanner.current - scanner.start);
+    token.line = scanner.line;
+
+    return token;
+}
+
 static Token string() {
     while (peek() != '"' && !isAtEnd()) {
         if (peek() != '\n') scanner.line++;
@@ -104,7 +130,7 @@ static Token string() {
 }
 
 static Token number() {
-    while (isDigi(peek())) advance();
+    while (isDigit(peek())) advance();
 
     // Fractional parts
     if (peek() == '.' && isDigit(peekNext())) {
@@ -114,12 +140,6 @@ static Token number() {
     }
     
     return makeToken(TOKEN_NUMBER);
-}
-
-static Token identifier() {
-    while (isAlpha(peek()) || isDigit(peek())) advance();
-
-    return makeToken(identiferType());
 }
 
 static TokenType identiferType() {
@@ -153,25 +173,12 @@ static TokenType identiferType() {
 }
 
 
-static Token makeToken(TokenType type) {
-    Token token;
-    token.type = type;
-    token.start = scanner.start;
-    token.length = (int) (scanner.current - scanner.start);
-    token.line = scanner.line;
+static Token identifier() {
+    while (isAlpha(peek()) || isDigit(peek())) advance();
 
-    return token;
+    return makeToken(identiferType());
 }
 
-static Token errorToken(const char* message) {
-    Token token;
-    token.type = TOKEN_ERROR;
-    token.start = message;
-    token.length = (int) strlen(message);
-    token.line = scanner.line;
-    
-    return token;
-}
 
 
 Token scanToken() {

@@ -15,10 +15,10 @@ void compile(const char* source){
     for (;;) {
         Token token = scanToken();
         if (token.line != line) {
-            prtinf("%4d ", token.line);
+            printf("%4d ", token.line);
             line = token.line;
         } else {
-            prtinf("   | ");
+            printf("   | ");
         }
         printf("%2d '%.*s\n", token.type, token.length, token.start);
 
