@@ -3,7 +3,7 @@
 
 ##### Variables #####
 Compiler = gcc
-Source = main.c chunk.c debug.c linearray.c memory.c value.c vm.c
+Source = main.c chunk.c compiler.c debug.c linearray.c memory.c value.c scanner.c vm.c
 Target = clox.exe
 Flags = -g -Wall
 

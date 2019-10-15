@@ -8,6 +8,7 @@
 #include "scanner.h"
 
 void compile(const char* source){
+    // Currently scanns through and outputs token 
     initScanner(source);
     int line = -1;
 
