@@ -11,12 +11,14 @@
 #include "chunk.h"
 #include "debug.h"
 #include "vm.h"
+#include "console.h"
 
 // Here for the debug proccess
-#define DEBUGFLAG
+//#define DEBUGFLAG
 
 static void repl(){
     char line[1024];
+    debugPrint("Entering REPL!");
 
     for (;;) {
         printf("> ");

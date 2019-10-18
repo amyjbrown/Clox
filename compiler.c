@@ -13,13 +13,9 @@ void compile(const char* source){
     // Currently scanns through and outputs token 
     initScanner(source);
     int line = -1;
-
-    DEBUGPRINT("Compiling..\n")
     
     for (;;) {
-        #ifdef DEBUGFLAG
-        DEBUGPRINT("Scanning token..\n")
-        #endif
+        debugPrint("Compiling token...");
 
         Token token = scanToken();
 

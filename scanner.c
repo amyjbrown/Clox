@@ -183,8 +183,6 @@ static Token identifier() {
 
 Token scanToken() {
     skipWhiteSpace();
-    #ifdef DEBUG_FLAG
-    #endif
 
     scanner.start = scanner.current;
 

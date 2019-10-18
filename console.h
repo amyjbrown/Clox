@@ -1,6 +1,8 @@
 /* Console.h
 A console and command line managing interface, mostly used for printing out colors 
 
+Contents:
+    * debugPrint(String message) outputs a message for debug purposes
 */
 
 #ifndef clox_console_h
@@ -8,21 +10,18 @@ A console and command line managing interface, mostly used for printing out colo
 
 #include <stdio.h>
 
-// #define DEBUG_FLAG_TRUE
+#define DEBUG_FLAG
 
-const char* RED = "\033[0;31m";
-const char* YELLOW = "\033[0;33m";
-const char* GREEN = "\033[0;32m";
-const char* RESET_COLOR = "\033[0;32m";
+#define ITALIC_ON "\033[3m"
+#define ITALICS_OFF "\033[23m"
 
-void debugPrint(const char* message) {
-    #ifdef DEBUG_FLAG
-    printf(GREEN);
-    printf(message);
-    printf("%s\n", RESET_COLOR)
-    #endif
-    return;
-}
+#define RED "\033[0;31m"
+#define YELLOW "\033[0;33m"
+#define GREEN "\033[0;32m"
+#define RESET_COLOR "\033[39;49m"
 
+void debugPrint(const char* message);
+void errorPrint(const char* message);
+void warningPrint(const char* message);
 
 #endif
