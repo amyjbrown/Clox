@@ -6,14 +6,23 @@
 #include "common.h"
 #include "compiler.h"
 #include "scanner.h"
+#include "console.h"
+
 
 void compile(const char* source){
     // Currently scanns through and outputs token 
     initScanner(source);
     int line = -1;
 
+    DEBUGPRINT("Compiling..\n")
+    
     for (;;) {
+        #ifdef DEBUGFLAG
+        DEBUGPRINT("Scanning token..\n")
+        #endif
+
         Token token = scanToken();
+
         if (token.line != line) {
             printf("%4d ", token.line);
             line = token.line;

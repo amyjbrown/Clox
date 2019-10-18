@@ -12,6 +12,9 @@
 #include "debug.h"
 #include "vm.h"
 
+// Here for the debug proccess
+#define DEBUGFLAG
+
 static void repl(){
     char line[1024];
 

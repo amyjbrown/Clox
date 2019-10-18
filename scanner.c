@@ -183,13 +183,16 @@ static Token identifier() {
 
 Token scanToken() {
     skipWhiteSpace();
+    #ifdef DEBUG_FLAG
+    #endif
 
     scanner.start = scanner.current;
 
     if (isAtEnd()) return makeToken(TOKEN_EOF);
     // Basic characters
 
-    char c = advance();
+    char c = advance(); 
+    //printf("Scanning char %c", c);
 
     if (isAlpha(c)) return identifier();
     if (isDigit(c)) return number();
