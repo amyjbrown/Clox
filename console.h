@@ -10,7 +10,7 @@ Contents:
 
 // Includes
 #include <stdio.h>
-// #include <stdarg.h>
+#include <stdarg.h>
 
 #define DEBUG_FLAG
 

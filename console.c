@@ -4,11 +4,15 @@
 
 #include "console.h"
 
-void debugPrint(const char* message) {
+void debugPrint(const char* message, ...) {
     #ifdef DEBUG_FLAG
-    // va_list args;
     printf("%s%s\n", ITALIC_ON,GREEN);
+    // Variadic iteration on *args
+    va_list args;
+    va_start(args, message);
     printf(message);
+    va_end(args);
+
     printf("%s%s\n", ITALICS_OFF,RESET_COLOR);
 
     #endif
