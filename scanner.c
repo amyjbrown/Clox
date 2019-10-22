@@ -8,7 +8,6 @@
 #include "scanner.h"
 #include "console.h"
 
-
 typedef struct {
     const char* start;
     const char* current;
@@ -124,8 +123,10 @@ static Token makeToken(TokenType type) {
 }
 
 static Token string() {
+    debugPrint("Parsing string...");
     while (peek() != '"' && !isAtEnd()) {
-        if (peek() != '\n') scanner.line++;
+        if (peek() == '\n') scanner.line++;
+        advance();
     }
 
     if (isAtEnd()) return errorToken("Unterminated string.");
