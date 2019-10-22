@@ -98,6 +98,7 @@ static TokenType checkKeyword(int start, int length,
             return type;
         }
 
+        debugPrint("Keyword didn't match, outputing Identifier");
         return TOKEN_IDENTIFIER;
 }
 
@@ -229,7 +230,7 @@ Token scanToken() {
             : (debugPrint ("Outputing '=' Token"), TOKEN_EQUAL));
         case '<':
             return makeToken(match('=') ? (debugPrint("Outputing '<=' Token"), TOKEN_LESS_EQUAL)
-            : (debugPrint ("Outputing '<' Token"), TOKEN_EQUAL));
+            : (debugPrint ("Outputing '<' Token"), TOKEN_LESS));
         case '>':
             return makeToken(match('=') ? (debugPrint("Outputing '>=' Token"), TOKEN_GREATER_EQUAL) 
             : (debugPrint("Outputing '>' Token"), TOKEN_GREATER) );
