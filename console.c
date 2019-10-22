@@ -8,7 +8,7 @@ void debugPrint(const char* message, ...) {
     #ifdef DEBUG_FLAG
     // Variadic iteration on *args
     va_list args;
-    printf("%s%s\n", ITALIC_ON,GREEN);
+    printf("%s%s", ITALIC_ON,GREEN);
 
     va_start(args, message);
     vprintf(message, args);
@@ -24,13 +24,13 @@ void errorPrint(const char* message, ...) {
     #ifdef DEBUG_FLAG
     va_list args;
 
-    printf("%s\n", RED);
+    fprintf(stderr, "%s", RED);
 
     va_start(args, message);
-    vprintf(message, args);
+    vfprintf(stderr, message, args);
     va_end(args);
 
-    printf("%s\n", RESET_COLOR);
+    fprintf(stderr, "%s\n", RESET_COLOR);
 
 
     #endif
@@ -42,7 +42,7 @@ void warningPrint(const char* message, ...) {
 
     va_list args;
 
-    printf("%s\n", YELLOW);
+    printf("%s", YELLOW);
     
     va_start(args, message);
     vprintf(message, args);
