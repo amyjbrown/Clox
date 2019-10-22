@@ -8,7 +8,9 @@ Contents:
 #ifndef clox_console_h
 #define clox_console_h
 
+// Includes
 #include <stdio.h>
+// #include <stdarg.h>
 
 #define DEBUG_FLAG
 

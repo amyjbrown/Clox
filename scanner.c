@@ -6,6 +6,8 @@
 
 #include "common.h"
 #include "scanner.h"
+#include "console.h"
+
 
 typedef struct {
     const char* start;
@@ -34,16 +36,19 @@ static bool match(char expected) {
 }
 
 static bool isDigit(char c) {
+    // debugPrint("checking if char is numeric");
     return c >= '0' && c <= '9';
 }
 
 static bool isAlpha(char c) {
+    // debugPrint("Checking if char is alphabetical");
     return (c <= 'a' && c <= 'z') ||
            (c >= 'A' && c <= 'Z') ||
            c == '_';
 }
 
 static char advance() {
+    // debugPrint("Advancing character");
     scanner.current++;
     return scanner.current[-1];
 }
@@ -59,6 +64,7 @@ static char peekNext() {
 }
 
 static void skipWhiteSpace() {
+    debugPrint("Skipping whitepsace...");
     for (;;) {
         char c = peek();
         switch (c){
@@ -108,6 +114,7 @@ static Token errorToken(const char* message) {
 }
 
 static Token makeToken(TokenType type) {
+    // debugPrint("Making Token")
     Token token;
     token.type = type;
     token.start = scanner.start;
@@ -144,6 +151,7 @@ static Token number() {
 
 static TokenType identiferType() {
 
+
     switch (scanner.start[0]) {
         case 'a': return checkKeyword(1, 2, "nd", TOKEN_AND);
         case 'c': return checkKeyword(1, 4, "lass", TOKEN_CLASS);
@@ -169,11 +177,13 @@ static TokenType identiferType() {
         case 'w': return checkKeyword(1, 4, "hile", TOKEN_WHILE);
     }
 
+    debugPrint("Unable to detect reserved word, outputing Identifier Token");
     return TOKEN_IDENTIFIER;
 }
 
 
 static Token identifier() {
+    // printDebug("");
     while (isAlpha(peek()) || isDigit(peek())) advance();
 
     return makeToken(identiferType());
@@ -182,48 +192,55 @@ static Token identifier() {
 
 
 Token scanToken() {
+    debugPrint("Scanning Token...");
+    
     skipWhiteSpace();
 
     scanner.start = scanner.current;
 
-    if (isAtEnd()) return makeToken(TOKEN_EOF);
+    if (isAtEnd()) { debugPrint("Making EOF Token"); return makeToken(TOKEN_EOF);}
     // Basic characters
 
     char c = advance(); 
+    
     //printf("Scanning char %c", c);
 
-    if (isAlpha(c)) return identifier();
-    if (isDigit(c)) return number();
+    if (isAlpha(c)) {debugPrint("Attempting to generate identifier"); return identifier();}
+    if (isDigit(c)) {debugPrint("Attempting to generate number"); return number();}
 
     switch(c) {
-        case '(': return makeToken(TOKEN_LEFT_PAREN);
-        case ')': return makeToken(TOKEN_RIGHT_PAREN);
-        case '{': return makeToken(TOKEN_LEFT_BRACE);
-        case '}': return makeToken(TOKEN_RIGHT_BRACE);
-        case ';': return makeToken(TOKEN_SEMICOLON);
-        case ',': return makeToken(TOKEN_COMMA);
-        case '.': return makeToken(TOKEN_DOT);
-        case '+': return makeToken(TOKEN_PLUS);
-        case '-': return makeToken(TOKEN_MINUS);
-        case '/': return makeToken(TOKEN_SLASH); // We consume comments in skipWhiteSpace()
-        case '*': return makeToken(TOKEN_STAR);
+        case '(': {debugPrint("Outputing '(' Token"); return makeToken(TOKEN_LEFT_PAREN);}
+        case ')': {debugPrint("Outputing ')' Token"); return makeToken(TOKEN_RIGHT_PAREN);}
+        case '{': {debugPrint("Outputing '{' Token"); return makeToken(TOKEN_LEFT_BRACE);}
+        case '}': {debugPrint("Outputing '}' Token"); return makeToken(TOKEN_RIGHT_BRACE);}
+        case ';': {debugPrint("Outputing ';' Token"); return makeToken(TOKEN_SEMICOLON);}
+        case ',': {debugPrint("Outputing ',' Token"); return makeToken(TOKEN_COMMA);}
+        case '.': {debugPrint("Outputing '.' Token"); return makeToken(TOKEN_DOT);}
+        case '+': {debugPrint("Outputing '+' Token"); return makeToken(TOKEN_PLUS);}
+        case '-': {debugPrint("Outputing '-' Token"); return makeToken(TOKEN_MINUS);}
+        case '/': {debugPrint("Outputing '/' Token");return makeToken(TOKEN_SLASH);} // We consume comments in skipWhiteSpace()
+        case '*': {debugPrint("Outputing '*' Token"); return makeToken(TOKEN_STAR);}
 
         case '!':
-            return makeToken(match('=') ? TOKEN_BANG_EQUAL : TOKEN_BANG);
+            return makeToken(match('=') ? (debugPrint("Outputing '!=' Token"), TOKEN_BANG_EQUAL) 
+            : ( debugPrint("Outputing '!' Token"),TOKEN_BANG) );
         case '=':
-            return makeToken(match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
+            return makeToken(match('=') ? (debugPrint("Outputing '==' Token"), TOKEN_EQUAL_EQUAL) 
+            : (debugPrint ("Outputing '=' Token"), TOKEN_EQUAL));
         case '<':
-            return makeToken(match('=') ? TOKEN_LESS_EQUAL : TOKEN_EQUAL);
+            return makeToken(match('=') ? (debugPrint("Outputing '<=' Token"), TOKEN_LESS_EQUAL)
+            : (debugPrint ("Outputing '<' Token"), TOKEN_EQUAL));
         case '>':
-            return makeToken(match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
+            return makeToken(match('=') ? (debugPrint("Outputing '>=' Token"), TOKEN_GREATER_EQUAL) 
+            : (debugPrint("Outputing '>' Token"), TOKEN_GREATER) );
 
         // Literals
-        case '"': return string();          
+        case '"': {debugPrint("Outputing String literal"); return string();}
     }
 
 
 
-
+    debugPrint("Couldn't detect character, outputing error token");
     return errorToken("Unexpected character.");
 }
 

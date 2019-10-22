@@ -15,7 +15,7 @@ void compile(const char* source){
     int line = -1;
     
     for (;;) {
-        debugPrint("Compiling token...");
+        //debugPrint("Compiling token...");
 
         Token token = scanToken();
 

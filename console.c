@@ -4,12 +4,13 @@
 
 #include "console.h"
 
-
 void debugPrint(const char* message) {
     #ifdef DEBUG_FLAG
+    // va_list args;
     printf("%s%s\n", ITALIC_ON,GREEN);
     printf(message);
     printf("%s%s\n", ITALICS_OFF,RESET_COLOR);
+
     #endif
     return;
 }
