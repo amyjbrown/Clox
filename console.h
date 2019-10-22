@@ -22,7 +22,7 @@ Contents:
 #define GREEN "\033[0;32m"
 #define RESET_COLOR "\033[39;49m"
 
-void debugPrint(const char* message);
+void debugPrint(const char* message, ...);
 void errorPrint(const char* message);
 void warningPrint(const char* message);
 
