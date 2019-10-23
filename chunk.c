@@ -64,6 +64,7 @@ void freeChunk(Chunk* chunk) {
     initChunk(chunk);
 }
 
+//todo write descript
 int addConstant(Chunk* chunk, Value value) {
     writeValueArray(&chunk->constants, value);
     return chunk->constants.count -1;
