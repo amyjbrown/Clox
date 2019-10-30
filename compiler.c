@@ -8,7 +8,7 @@
 #include "compiler.h"
 #include "scanner.h"
 #include "console.h"
-
+#include "debug.h"
 
 typedef struct {
     Token current;
@@ -129,8 +129,20 @@ static void emitConstant(Value value) {
 // Currently just emits Return opcode
 static void endCompiler() {
     emitReturn();
+    #ifdef DEBUG_PRINT_CODE
+    if (!parser.hadError) {
+        disassembleChunk(currentChunk(), "code");
+    }
+    #endif
 }
 
+// Forward delcarations
+
+static void expression();
+static ParseRule* getRule(TokenType type);
+static void parsePrecedence(Precedence precedence);
+
+// Parses and emits bytecode for binary operator 
 static void binary() {
     // Remember the operator
     TokenType operatorType = parser.previous.type;
@@ -224,10 +236,24 @@ ParseRule rules[] = {
 
 
 static void parsePrecedence(Precedence precedence) {
-    //tbd
+    advance();
+
+    ParseFn prefixRule = getRule(parser.previous.type)->prefix;
+    if (prefixRule == NULL) {
+        error("Expect expression");
+        return;
+    }
+
+    prefixRule();
+
+    while (precedence <= getRule(parser.current.type)->precedence) {
+        advance();
+        ParseFn infixRule = getRule(parser.previous.type)->infix;
+        infixRule();
+    }
 }
 
-// Returns rule for token Type
+// Returns rule for token Type, using TokenTypess value as index
 static ParseRule* getRule(TokenType type) {
     return &rules[type];
 }

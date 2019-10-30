@@ -5,12 +5,13 @@
 #include "linearray.h"
 #include "memory.h"
 
+
 //Get the line count of a line-array, given an index
 int getLine(LineArray* array, int index) {
     // Iterate over
     int target = index;
 
-    for (int i=0; i<array->count; i++) {
+    for (int i=0; i < array->count; i++) {
         // If we have yet to reach the goal, decrease the count
         if (array->lineCount[i] > target){
             return array->lines[i];
@@ -42,8 +43,8 @@ static int containsLine(LineArray* array, int line) {
         if (array->lines[i] == line) return i;
     }
 
-    //-1 for Does Not Contain
-    return -1;
+    //-2 for Does Not Contain
+    return -2;
 }
 
 ///Updates Array
@@ -81,6 +82,7 @@ void updateLineArray(LineArray* array, int line, int count) {
         }
         // Properly update the lines
         //printf("Now assigning new, proper values\n");
+        // TODO this
         array->lines[array->count] = line;
         array->lineCount[array->count] = count;
         array->count++;
