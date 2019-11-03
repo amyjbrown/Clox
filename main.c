@@ -81,9 +81,6 @@ static void runFile(const char* path) {
 
 
 int main(int argc, const char* argv[]) {
-    debugPrint("Debug print outputing:  %d (2), %s (Text) ", 2, "text");
-    warningPrint("Warning print outputing: %d(2), %s(text)", 2, "text");
-    errorPrint("Error print outputing: %d(2), %s(text)", 2, "text");
     // Initialize virtual machine
     initVM();
 

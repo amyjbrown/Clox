@@ -2,9 +2,17 @@
 // Imeplementation details for Linearray.h
 
 //#include "stdio.h"
+#include <limits.h>
 #include "linearray.h"
 #include "memory.h"
 
+
+// I will add Result types damnit
+
+typedef struct {
+    bool valid;
+    int line;
+} ResultLine;
 
 //Get the line count of a line-array, given an index
 int getLine(LineArray* array, int index) {
@@ -23,7 +31,7 @@ int getLine(LineArray* array, int index) {
 
     }
     // If we haven't gotten here yet, return -2 as Error
-    return -2;
+    return INT_MIN;
 }
 
 
@@ -38,13 +46,19 @@ void initLineArray(LineArray* array) {
 }
 
 // Find and return the index that line has in the system
-static int containsLine(LineArray* array, int line) {
-    for (int i=0; i<array->count; i++) {
-        if (array->lines[i] == line) return i;
+static ResultLine containsLine(LineArray* array, int line) {
+    ResultLine result;
+    for (int i=0; i < array->count; i++) {
+        if (array->lines[i] == line) {
+            result.valid = true;
+            result.line = i;
+            return result;
+        }
     }
 
     //-2 for Does Not Contain
-    return -2;
+    result.valid=false; result.line =-1;
+    return result;
 }
 
 ///Updates Array
@@ -53,12 +67,12 @@ void updateLineArray(LineArray* array, int line, int count) {
 
     // IF line in `lines` -- update it
 
-    int index = containsLine(array, line);
+    ResultLine result = containsLine(array, line);
 
-    if (index != -2) { // IF Index is not Error Code
+    if (result.valid) { // IF Index is not Error Code
     // I think I fixed a bug here?
         //printf("Incrementing Line count");
-        array->lineCount[index] += count;
+        array->lineCount[result.line] += count;
         return;
     } 
 
