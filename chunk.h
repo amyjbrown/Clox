@@ -16,8 +16,6 @@ Contens:
 #include "value.h"
 #include "linearray.h"
 
-#define POTATO(x) \
-    printf("%s", x)
 
 typedef enum {
     OP_RETURN,
