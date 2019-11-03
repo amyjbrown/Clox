@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "c:/Users/jonat/programs/clox/clox-debug.exe",
+            "program": "/mnt/c/Users/jonat/programs/clox",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
