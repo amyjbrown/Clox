@@ -115,7 +115,7 @@ static uint8_t makeConstant(Value value) {
     if (constant > UINT8_MAX) {
         error("Too many constants in one chunk.");
     }
-    return 0;
+    // return 0;
 
     return (uint8_t) constant;
 }
