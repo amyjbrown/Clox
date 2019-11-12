@@ -22,7 +22,7 @@ void initChunk(Chunk* chunk) {
     chunk->count = 0;
     chunk->capacity = 0;
     chunk->code = NULL;
-    // Initialized Dynamic Arrays
+    // Implementation Dynamic Arrays
     initLineArray(&chunk->lines);
     initValueArray(&chunk->constants);
 }
@@ -41,17 +41,19 @@ void writeChunk(Chunk* chunk, uint8_t byte, int line) {
         chunk-> code = GROW_ARRAY(
             chunk->code, uint8_t, old_capacity, chunk->capacity
         );
+
+        // Reallocate line count
+        updateLineArray(&chunk->lines, line, 1);
+
         //printf("Rewrote chunk: Count %d, Capacity %d->%d \n",
         // chunk->count, old_capacity, chunk->capacity);
 
     }
 
-    // Update the line count, *REGARDLESS* of if the code array has been expanded
-    updateLineArray(&chunk->lines, line, 1);
-
     // Write the byte to the end of the ArrayList and update count
     chunk->code[chunk->count] = byte;
     chunk->count++;
+
 }
 
 void freeChunk(Chunk* chunk) {
@@ -62,7 +64,6 @@ void freeChunk(Chunk* chunk) {
     initChunk(chunk);
 }
 
-//todo write descript
 int addConstant(Chunk* chunk, Value value) {
     writeValueArray(&chunk->constants, value);
     return chunk->constants.count -1;
