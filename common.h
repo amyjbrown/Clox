@@ -5,6 +5,9 @@
 
 #define clox_common_h
 
+#define DEBUG_PRINT_CODE
+// #define DEBUG_TRACE_EXECUTION
+
 // Standard Library extension types for booleans, ints and pointer/size manipulations
 #include <stdbool.h>
 #include <stddef.h> // Important for pointers!

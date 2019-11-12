@@ -62,7 +62,9 @@ static char peekNext() {
 }
 
 static void skipWhiteSpace() {
+    #ifdef DEBUG_PRINT_CODE
     debugPrint("Skipping whitepsace...");
+    #endif
     for (;;) {
         char c = peek();
         switch (c){
@@ -98,7 +100,9 @@ static TokenType checkKeyword(int start, int length,
             return type;
         }
 
+        #ifdef DEBUG_PRINT_CODE
         debugPrint("Keyword didn't match, outputing Identifier");
+        #endif
         return TOKEN_IDENTIFIER;
 }
 
@@ -124,7 +128,9 @@ static Token makeToken(TokenType type) {
 }
 
 static Token string() {
+    #ifdef DEBUG_PRINT_CODE
     debugPrint("Parsing string...");
+    #endif
     while (peek() != '"' && !isAtEnd()) {
         if (peek() == '\n') scanner.line++;
         advance();
@@ -177,8 +183,9 @@ static TokenType identiferType() {
         case 'v': return checkKeyword(1, 2, "ar", TOKEN_VAR);
         case 'w': return checkKeyword(1, 4, "hile", TOKEN_WHILE);
     }
-
+    #ifdef DEBUG_PRINT_CODE
     debugPrint("Unable to detect reserved word, outputing Identifier Token");
+    #endif
     return TOKEN_IDENTIFIER;
 }
 
@@ -193,55 +200,56 @@ static Token identifier() {
 
 
 Token scanToken() {
+    #ifdef DEBUG_PRINT_CODE
     debugPrint("Scanning Token...");
+    #endif
     
     skipWhiteSpace();
 
     scanner.start = scanner.current;
 
-    if (isAtEnd()) { debugPrint("Making EOF Token"); return makeToken(TOKEN_EOF);}
+    if (isAtEnd()) return makeToken(TOKEN_EOF);
     // Basic characters
 
     char c = advance(); 
     
     //printf("Scanning char %c", c);
 
-    if (isAlpha(c)) {debugPrint("Attempting to generate identifier"); return identifier();}
-    if (isDigit(c)) {debugPrint("Attempting to generate number"); return number();}
+    if (isAlpha(c)) return identifier();
+    if (isDigit(c))  return number();
 
     switch(c) {
-        case '(': {debugPrint("Outputing '(' Token"); return makeToken(TOKEN_LEFT_PAREN);}
-        case ')': {debugPrint("Outputing ')' Token"); return makeToken(TOKEN_RIGHT_PAREN);}
-        case '{': {debugPrint("Outputing '{' Token"); return makeToken(TOKEN_LEFT_BRACE);}
-        case '}': {debugPrint("Outputing '}' Token"); return makeToken(TOKEN_RIGHT_BRACE);}
-        case ';': {debugPrint("Outputing ';' Token"); return makeToken(TOKEN_SEMICOLON);}
-        case ',': {debugPrint("Outputing ',' Token"); return makeToken(TOKEN_COMMA);}
-        case '.': {debugPrint("Outputing '.' Token"); return makeToken(TOKEN_DOT);}
-        case '+': {debugPrint("Outputing '+' Token"); return makeToken(TOKEN_PLUS);}
-        case '-': {debugPrint("Outputing '-' Token"); return makeToken(TOKEN_MINUS);}
-        case '/': {debugPrint("Outputing '/' Token");return makeToken(TOKEN_SLASH);} // We consume comments in skipWhiteSpace()
-        case '*': {debugPrint("Outputing '*' Token"); return makeToken(TOKEN_STAR);}
+        case '(': {return makeToken(TOKEN_LEFT_PAREN);}
+        case ')': {return makeToken(TOKEN_RIGHT_PAREN);}
+        case '{': {return makeToken(TOKEN_LEFT_BRACE);}
+        case '}': {return makeToken(TOKEN_RIGHT_BRACE);}
+        case ';': {return makeToken(TOKEN_SEMICOLON);}
+        case ',': {return makeToken(TOKEN_COMMA);}
+        case '.': {return makeToken(TOKEN_DOT);}
+        case '+': {return makeToken(TOKEN_PLUS);}
+        case '-': {return makeToken(TOKEN_MINUS);}
+        case '/': {return makeToken(TOKEN_SLASH);} // We consume comments in skipWhiteSpace()
+        case '*': {return makeToken(TOKEN_STAR);}
 
         case '!':
-            return makeToken(match('=') ? (debugPrint("Outputing '!=' Token"), TOKEN_BANG_EQUAL) 
-            : ( debugPrint("Outputing '!' Token"),TOKEN_BANG) );
+            return makeToken(match('=') ? (TOKEN_BANG_EQUAL) : (TOKEN_BANG) );
         case '=':
-            return makeToken(match('=') ? (debugPrint("Outputing '==' Token"), TOKEN_EQUAL_EQUAL) 
-            : (debugPrint ("Outputing '=' Token"), TOKEN_EQUAL));
+            return makeToken(match('=') ? (TOKEN_EQUAL_EQUAL) 
+            : ( TOKEN_EQUAL));
         case '<':
-            return makeToken(match('=') ? (debugPrint("Outputing '<=' Token"), TOKEN_LESS_EQUAL)
-            : (debugPrint ("Outputing '<' Token"), TOKEN_LESS));
+            return makeToken(match('=') ? (TOKEN_LESS_EQUAL): (TOKEN_LESS));
         case '>':
-            return makeToken(match('=') ? (debugPrint("Outputing '>=' Token"), TOKEN_GREATER_EQUAL) 
-            : (debugPrint("Outputing '>' Token"), TOKEN_GREATER) );
+            return makeToken(match('=') ? (TOKEN_GREATER_EQUAL) : (TOKEN_GREATER) );
 
         // Literals
-        case '"': {debugPrint("Outputing String literal"); return string();}
+        case '"': {return string();}
     }
 
 
-
+    #ifdef DEBUG_PRINT_CODE
     debugPrint("Couldn't detect character, outputing error token");
+    #endif
+    
     return errorToken("Unexpected character.");
 }
 
