@@ -1,18 +1,17 @@
-# Makefile for building Clox
-# TBD as I make things work out better!
+# Source
+CC = gcc
+SRC = $(wildcard .c)
+OBJ = $(SRC:.c=.o)
+EXE = clox
+CFLAGS = -Wall -g -pedantic -g
 
-##### Variables #####
-Compiler = gcc
-Source = main.c chunk.c compiler.c console.c debug.c linearray.c memory.c value.c scanner.c vm.c
-Target = clox.exe
-Flags = -g -Wall
+# Compile and assemble C source files
+%.o: %.c
+	$(CC) -c $(CFLAGS) $*.c
 
-##### Commands #####
-clox :
-	$(Compiler) $(Source) -o $(Target)
+# Link all OBJs
+$(EXE): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ)
 
-debug :
-	$(Compiler) $(Flags) $(Source) -o clox-debug.exe
-
-tree :
-	$(Compiler) -MH $(Source)
+clean:
+	rm -f $(OBJ) 
