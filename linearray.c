@@ -50,7 +50,7 @@ void updateLineArray(LineArray *array, int line, int count) {
     //printf("Updating linearray with token at %d\n", line);
 
     // First, detect IF array already contains the line in it
-    for (int index=0; index < array->count; array++) {
+    for (int index=0; index < array->count; index++) {
         if (array->lines[index] == line) {
                 array->lineCount[index] += count;
                 return;
@@ -72,6 +72,7 @@ void updateLineArray(LineArray *array, int line, int count) {
     // Note linecount is assigned `count` because it only now exists
     array->lines[array->count] = line;
     array->lineCount[array->count] = count;
+    array->count++;
 }
 
 //Free up the space of line array
