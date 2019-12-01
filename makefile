@@ -1,6 +1,6 @@
 # Source
 CC = gcc
-SRC = $(wildcard .c)
+SRC = $(wildcard *.c)
 EXE = clox.exe
 CFLAGS = -Wall -g -pedantic -g
 
