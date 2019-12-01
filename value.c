@@ -32,5 +32,10 @@ void freeValueArray(ValueArray* array) {
 }
 
 void printValue(Value value) {
-    printf("%g", value);
+    if (IS_BOOL(value))
+        printf(value.as.boolean ? "True" : "False");
+    else if (IS_NIL(value))
+        printf("Nil");
+    else if (IS_NUMBER(value))
+        printf("%g", value.as.number);
 }
