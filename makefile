@@ -1,17 +1,10 @@
 # Source
 CC = gcc
 SRC = $(wildcard .c)
-OBJ = $(SRC:.c=.o)
-EXE = clox
+EXE = clox.exe
 CFLAGS = -Wall -g -pedantic -g
 
-# Compile and assemble C source files
-%.o: %.c
-	$(CC) -c $(CFLAGS) $*.c
+debug :
+	$(CC) $(CFLAGS) $(SRC) -o $(EXE)
 
-# Link all OBJs
-$(EXE): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ)
-
-clean:
-	rm -f $(OBJ) 
+# TODO make a general C builder
