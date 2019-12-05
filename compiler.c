@@ -157,6 +157,13 @@ static void binary() {
         case TOKEN_MINUS:    emitByte(OP_SUBSTRACT); break;
         case TOKEN_STAR:    emitByte(OP_MULPTIPLY); break;
         case TOKEN_SLASH:   emitByte(OP_DIVIDE); break;
+        // Comparison
+        case TOKEN_BANG_EQUAL:  emitBytes(OP_EQUAL, OP_NOT); break;
+        case TOKEN_EQUAL_EQUAL: emitByte(OP_EQUAL); break;
+        case TOKEN_GREATER:     emitByte(OP_GREATER); break;
+        case TOKEN_GREATER_EQUAL:   emitBytes(OP_LESS, OP_NOT); break;
+        case TOKEN_LESS:      emitByte(OP_LESS); break;
+        case TOKEN_LESS_EQUAL:  emitBytes(OP_GREATER, OP_NOT); break;
 
         default:
             debugPrint("Unable to parse binary operator.") ;return; // Unreachable

@@ -9,6 +9,7 @@
 #include "common.h"
 #include "vm.h"
 #include "debug.h"
+#include "console.h"
 
 // Static Virtual Machine instance
 VM vm;
@@ -19,15 +20,18 @@ static void resetStack() {
 }
 
 static void runtimeError(const char* format, ...){
+
+    size_t instruction = vm.ip - vm.chunk->code;
+    int line = getLine(&vm.chunk->lines, (int) instruction);
+    fprintf(stderr, "%s[line %d] in script ", RED, line);
+    // Print the error
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
     va_end(args);
+    fprintf(stderr, "%s", RESET_COLOR);
     fputs("\n", stderr);
 
-    size_t instruction = vm.ip - vm.chunk->code;
-    int line = getLine(&vm.chunk->lines, (int) instruction);
-    fprintf(stderr, "[line %d] in script\n", line);
 
     resetStack();
 }
@@ -59,7 +63,7 @@ static InterpretResult run() {
       double b = AS_NUMBER(pop()); \
       double a = AS_NUMBER(pop()); \
       push(valueType(a op b));\
-    } while (false)                                              
+    } while (false)
 
 
     for (;;) {
@@ -80,15 +84,22 @@ static InterpretResult run() {
         uint8_t instruction;
         switch (instruction=READ_BYTE()) {
             case OP_RETURN: {
-                return INTERPRET_OK;
                 printValue(pop());
                 printf("\n");
+                return INTERPRET_OK;
             }
         
             case OP_CONSTANT: {
                 Value constant = READ_CONSTANT();
                 push(constant);
                 // printf("\n");
+                break;
+            }
+
+            case OP_EQUAL: {
+                Value b = pop();
+                Value a = pop();
+                push(BOOL_VAL(valuesEqual(a, b)));
                 break;
             }
 
@@ -106,6 +117,8 @@ static InterpretResult run() {
                 }
                 push(NUMBER_VAL(- AS_NUMBER(pop())));
                 break;
+            case OP_GREATER: BINARY_OP(BOOL_VAL, >);
+            case OP_LESS:   BINARY_OP(BOOL_VAL, <);
             case OP_ADD: BINARY_OP(NUMBER_VAL, +); break;
             case OP_SUBSTRACT: BINARY_OP(NUMBER_VAL, -); break;
             case OP_MULPTIPLY: BINARY_OP(NUMBER_VAL, *); break;
