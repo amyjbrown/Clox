@@ -210,24 +210,24 @@ static void unary() {
 
 ParseRule rules[] = {
     {grouping, NULL, PREC_NONE},    // TOKEN_LEFT_PAREN
-    {NULL, NULL, PREC_NONE},        // TOKEN_RIGHT PAREN
-    {NULL, NULL, PREC_NONE},        // TOKEN_LEFT_BRACE
-    {NULL, NULL, PREC_NONE},        //TOKEN_RIGHT_BRACE
-    {NULL, NULL, PREC_NONE},        // TOKEN_COMMA
-    {NULL, NULL, PREC_NONE},        // TOKEN_DOT
-    {unary, binary, PREC_TERM},     // TOKEN_MINUS
-    {NULL, binary, PREC_TERM},      // TOKEN_PLUS
-    {NULL, NULL, PREC_NONE},        // TOKEN_SEMICOLON
-    {NULL, binary, PREC_FACTOR},    // TOKEN_SLASH
-    {NULL, binary, PREC_FACTOR},    // TOKEN_STAR
-    {unary, NULL, PREC_NONE},        // TOKEN_BANG
-    {NULL, NULL, PREC_NONE},        //TOKEN_BANG_EQUAL
-    { NULL,     NULL,    PREC_NONE },// TOKEN_EQUAL
-    {NULL, NULL, PREC_NONE},        // TOKEN_EQUAL_EQUAL
-    {NULL, NULL, PREC_NONE},        // TOKEN_GREATER
-    {NULL, NULL, PREC_NONE},        // TOKEN_GREATER_EQUAL
-    {NULL, NULL, PREC_NONE},        // TOKEN_LESS
-    {NULL, NULL, PREC_NONE},        // TOKEN_LESS_EQUAL
+    {NULL,      NULL,       PREC_NONE},        // TOKEN_RIGHT PAREN
+    {NULL,      NULL,       PREC_NONE},        // TOKEN_LEFT_BRACE
+    {NULL,      NULL,       PREC_NONE},        //TOKEN_RIGHT_BRACE
+    {NULL,      NULL,       PREC_NONE},        // TOKEN_COMMA
+    {NULL,      NULL,       PREC_NONE},        // TOKEN_DOT
+    {unary,     binary,     PREC_TERM},     // TOKEN_MINUS
+    {NULL,      binary,     PREC_TERM},      // TOKEN_PLUS
+    {NULL,      NULL,       PREC_NONE},        // TOKEN_SEMICOLON
+    {NULL,      binary,     PREC_FACTOR},    // TOKEN_SLASH
+    {NULL,      binary,     PREC_FACTOR},    // TOKEN_STAR
+    {unary,     NULL,       PREC_NONE},        // TOKEN_BANG
+    {NULL,      binary,     PREC_EQUALITY},        //TOKEN_BANG_EQUAL
+    { NULL,     NULL,       PREC_NONE },// TOKEN_EQUAL
+    { NULL,     binary,     PREC_EQUALITY },   // TOKEN_EQUAL_EQUAL  
+    { NULL,     binary,     PREC_COMPARISON }, // TOKEN_GREATER      
+    { NULL,     binary,     PREC_COMPARISON }, // TOKEN_GREATER_EQUAL
+    { NULL,     binary,     PREC_COMPARISON }, // TOKEN_LESS         
+    { NULL,     binary,     PREC_COMPARISON }, // TOKEN_LESS_EQUAL   
     {NULL, NULL, PREC_NONE},        // TOKEN_IDENTIFIER
     {NULL, NULL, PREC_NONE},        // TOKEN_STRING
     {number, NULL, PREC_NONE},      // TOKEN_NUMBER

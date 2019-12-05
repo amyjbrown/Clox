@@ -8,6 +8,10 @@
 #include "scanner.h"
 #include "console.h"
 
+// Undefined debug print so I don't have to worry about it for now
+#undef DEBUG_PRINT_CODE
+
+
 typedef struct {
     const char* start;
     const char* current;

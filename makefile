@@ -4,7 +4,7 @@ SRC = $(wildcard *.c)
 EXE = clox.exe
 CFLAGS = -Wall -g -pedantic -g
 
-debug :
+debug:
 	$(CC) $(CFLAGS) $(SRC) -o $(EXE)
 
 # TODO make a general C builder
