@@ -117,8 +117,9 @@ static InterpretResult run() {
                 }
                 push(NUMBER_VAL(- AS_NUMBER(pop())));
                 break;
-            case OP_GREATER: BINARY_OP(BOOL_VAL, >);
-            case OP_LESS:   BINARY_OP(BOOL_VAL, <);
+
+            case OP_GREATER: BINARY_OP(BOOL_VAL, >); break;
+            case OP_LESS:   BINARY_OP(BOOL_VAL, <); break;
             case OP_ADD: BINARY_OP(NUMBER_VAL, +); break;
             case OP_SUBSTRACT: BINARY_OP(NUMBER_VAL, -); break;
             case OP_MULPTIPLY: BINARY_OP(NUMBER_VAL, *); break;
