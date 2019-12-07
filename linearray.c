@@ -9,6 +9,7 @@
 
 // I will add Result types damnit
 
+
 typedef struct {
     bool valid;
     int line;

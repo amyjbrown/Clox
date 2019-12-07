@@ -24,6 +24,9 @@ Positive    > Oldsize    Grow allocation
 #ifndef clox_memory_h
 #define clox_memory_h
 
+#define ALLOCATE(type, count) \
+    (type*) reallocate(NULL, 0, sizeof(type) * (count));
+
 #define GROW_CAPACITY(capacity) \
     ((capacity) < 8 ? 8 : (capacity) * 2)
 
