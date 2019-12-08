@@ -1,0 +1,37 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.c": "c",
+			"*.h": "c",
+		},
+		"C_Cpp.enhancedColorization": "Enabled",
+
+		"editor.tokenColorCustomizations": {
+			"[Kimbie Dark]": {
+				"textMateRules": [
+					{
+						"scope":"entity.name.type",
+						"settings": {
+							"foreground": "#508caf",
+							"fontStyle": "bold italic"
+						}
+					}, 
+					{
+						"scope": "entity.name.function.preprocessor",
+						"settings": {
+							"foreground": "#c72b2b",
+							"fontStyle": "bold"
+						}
+					}
+				]
+				
+			}
+		
+		}
+	}
+}

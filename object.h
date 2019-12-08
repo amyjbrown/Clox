@@ -20,6 +20,7 @@ typedef enum {
 
 struct sObj {
     ObjType type;
+    struct sObj* next;
 };
 
 struct sObjString{
@@ -28,16 +29,9 @@ struct sObjString{
     char* chars;
 };
 
+ObjString* takeString(char* chars, int length);
 ObjString* copyString(const char* chars, int length);
-
-void printObject(Value value) {
-    switch (OBJ_TYPE(value)) {
-        case OBJ_STRING:
-            printf("%s", AS_CSTRING(value));
-            break;
-    }
-}
-
+void printObject(Value value);
 // Inline to assist macro `IS_STRING(value)
 static inline bool isObjType(Value value, ObjType type) {
     return IS_OBJ(value) && AS_OBJ(value)->type == type;
