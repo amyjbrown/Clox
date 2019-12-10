@@ -22,7 +22,11 @@ struct sObj {
     ObjType type;
     struct sObj* next;
 };
-
+/*
+* sObjString served as the implementation of ObjString - 
+* It effaces a psuedo-GC linked list by checking which object
+* a VM object will serve as the base root for the list
+*/
 struct sObjString{
     Obj obj;
     int length;
