@@ -48,6 +48,8 @@ static Value peek(int distance) {
     return vm.stackTop[-1-distance];
 }
 
+// isFalsey :: Value -> bool
+// Returns true if Boolean value is False 
 static bool isFalsey(Value value) {
     return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value) );
 }
@@ -139,6 +141,24 @@ static InterpretResult run() {
 
             case OP_GREATER: BINARY_OP(BOOL_VAL, >); break;
             case OP_LESS:   BINARY_OP(BOOL_VAL, <); break;
+
+            // logical operators
+            case OP_AND: {
+                bool b = ! isFalsey(pop());
+                bool a = ! isFalsey(pop());
+                push(BOOL_VAL(a && b));
+                break;
+            }
+
+            case OP_OR : {
+                bool b = ! isFalsey(pop());
+                bool a = ! isFalsey(pop());
+                push(BOOL_VAL(a || b));
+                break;
+            }
+
+
+            // Arithmetic operators
             case OP_ADD: {
                 if (IS_STRING(peek(0)) && IS_STRING(peek(1))) {
                     concatenate();

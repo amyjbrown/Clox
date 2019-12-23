@@ -32,6 +32,8 @@ typedef enum {
     OP_SUBSTRACT,
     OP_MULPTIPLY,
     OP_DIVIDE,
+    OP_AND,
+    OP_OR,
 }   OpCode;
 
 // Dynamic Array Chunks
