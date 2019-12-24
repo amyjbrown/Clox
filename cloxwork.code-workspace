@@ -12,6 +12,8 @@
 		"C_Cpp.enhancedColorization": "Enabled",
 
 		"editor.tokenColorCustomizations": {
+
+
 			"[Kimbie Dark]": {
 				"textMateRules": [
 					{
