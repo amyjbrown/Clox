@@ -13,6 +13,9 @@
 
 		"editor.tokenColorCustomizations": {
 
+			
+			// "comments": "#7daf21",
+
 
 			"[Kimbie Dark]": {
 				"textMateRules": [

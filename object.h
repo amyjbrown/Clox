@@ -34,8 +34,11 @@ struct sObjString{
     uint32_t hash;
 };
 
+// Allocate a String on the heap and return a reference to the created String-Object 
 ObjString* takeString(char* chars, int length);
+// Copy and allocate a string given a current string
 ObjString* copyString(const char* chars, int length);
+// Prints the value of an object
 void printObject(Value value);
 // Inline to assist macro `IS_STRING(value)
 static inline bool isObjType(Value value, ObjType type) {

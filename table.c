@@ -27,19 +27,30 @@ static Entry* findEntry (Entry* entries, int capacity, ObjString* key){
     // We get the 'index', which is in fact the String's hash
     // modulo the table, finding it's offset
     uint32_t index = key->hash % capacity;
+    Entry* tombstone = NULL;
 
 
     //Check for the key's inclusion in the table until It 
     // * Is Found
-    // * An empety spot is found where it should be 
+    // * An empty spot is found where it should be 
+    // * Check
     for (;;) {
         // Get the element at the index
         Entry* entry = &entries[index];
-        //If that entry is the key, OR it's empty,
-        // Return that element
-        if (entry->key == key || entry->key == NULL) {
+        if (entry->key == NULL) {
+            if (IS_NIL(entry->value)) {
+                //Empty entry
+                return tombstone != NULL ? tombstone : entry;
+            }
+            else {
+                //we found a tombstone
+                if (tombstone == NULL) tombstone = entry;
+            }
+        }
+        else if (entry->key==key) {
             return entry;
         }
+
         // Else, 
         index = (index + 1) % capacity;
     }
@@ -85,8 +96,6 @@ bool tableSet(Table* table, ObjString* key, Value value) {
         adjustCapacity(table, capacity);
     }
 
-    key;
-
     Entry* entry = findEntry(table->entries, table->capacity, key);
 
     bool isNewKey = entry->key == NULL;
@@ -95,6 +104,19 @@ bool tableSet(Table* table, ObjString* key, Value value) {
     entry->key = key;
     entry->value = value;
     return isNewKey;
+}
+
+bool tableDelete(Table* table, ObjString* key) {
+    if (table->count == 0) return false;
+
+    //Find entry
+    Entry *entry = findEntry(table->entries, table->capacity, key);
+    if (entry->key == NULL) return false;
+
+    //Place tombstone
+    entry->key = NULL;
+    entry->value = BOOL_VAL(true);
+    return true;
 }
 
 
