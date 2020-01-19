@@ -208,6 +208,7 @@ InterpretResult interpret(const char* source) {
 
 
 void freeVM(){
+    freeTable(&vm.strings);
     freeObjects();
 }
 
