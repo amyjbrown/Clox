@@ -56,7 +56,7 @@ static void errorAt(Token* token, const char* message) {
 
     parser.panicMode = true;
 
-    fprintf(stderr, "%s[line %d] Error", RED, token->line);
+    fprintf(stderr, "%s[line %d] Error ", RED, token->line);
 
     if (token->type == TOKEN_EOF) {
         fprintf(stderr, " at end");
@@ -88,11 +88,23 @@ static void advance() {
     }
 }
 
+//Expects 
 static void consume(TokenType type, const char* message) {
     if (parser.current.type == type) {
         advance();
         return;
     }
+}
+
+static bool check(TokenType type) {
+    return parser.current.type == type;
+}
+
+// Checks and advances if next token is of type Type
+static bool match(TokenType type) {
+    if (!check(type)) return false;
+    advance();
+    return true;
 }
 // Writes Bytecode byte and metadata to current chunk
 static void emitByte(uint8_t byte) {
@@ -296,10 +308,25 @@ static ParseRule* getRule(TokenType type) {
 }
 
 // Describe what precedences levels we're operator at
-void expression() {
+static void expression() {
     parsePrecedence(PREC_ASSIGNMENT);
 }
 
+static void printStatement() {
+    expression();
+    consume(TOKEN_SEMICOLON, "Expect ';' after value.");
+    emitByte(OP_PRINT);
+}
+
+static void statement() {
+    if (match(TOKEN_PRINT)) {
+        printStatement();
+    }
+}
+
+static void declaration() {
+    statement();
+}
 
 bool compile(const char* source, Chunk* chunk){
     // Currently scanns through and outputs token 
@@ -313,7 +340,9 @@ bool compile(const char* source, Chunk* chunk){
     // int line = -1;
     advance();
     expression();
-    consume(TOKEN_EOF, "Expect end of expression.");
+    while (!match(TOKEN_EOF)) {
+        declaration();
+    }
     endCompiler();
 
     return ! parser.hadError;

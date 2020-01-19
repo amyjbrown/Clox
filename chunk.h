@@ -19,6 +19,7 @@ Contens:
 
 typedef enum {
     OP_RETURN,
+    OP_PRINT,
     OP_CONSTANT,
     OP_NIL,
     OP_TRUE,
