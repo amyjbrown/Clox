@@ -98,6 +98,10 @@ int disassembleInstruction(Chunk* chunk, int offset) {
         case OP_DIVIDE:
             return simpleInstruction("OP_DIVIDE", offset); break;
         
+        case OP_POP:                                   
+            return simpleInstruction("OP_POP", offset);  
+
+        
         default:
             printf("Unknown opcode %d\n", instruction);
             return offset + 1; break;

@@ -109,6 +109,9 @@ static InterpretResult run() {
                 printf("\n");
                 break;
             }
+
+            case OP_POP: pop(); break;
+            
             case OP_RETURN: {
                 //Exit the interpreter 
                 return INTERPRET_OK;
