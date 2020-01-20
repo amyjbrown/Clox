@@ -34,7 +34,7 @@ typedef enum {
 } Precedence;
 
 // Function pointer for function that no arguements, returns no arguments
-typedef void (*ParseFn) ();
+typedef void (*ParseFn) (bool canAssign);
 
 typedef struct {
     ParseFn prefix;
@@ -156,7 +156,9 @@ static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 
 static uint8_t identifierConstant(Token* name) {
-    return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
+    return makeConstant(
+        OBJ_VAL(
+            copyString(name->start, name->length)));
 }
 
 static uint8_t parseVariable(const char* errorMessage){
@@ -164,8 +166,12 @@ static uint8_t parseVariable(const char* errorMessage){
     return identifierConstant(&parser.previous);
 }
 
+static void defineVariable(uint8_t global) {
+    emitBytes(OP_DEFINE_GLOBAL, global);
+}
+
 // Parses and emits bytecode for binary operator 
-static void binary() {
+static void binary(bool canAssign) {
     // Remember the operator
     TokenType operatorType = parser.previous.type;
 
@@ -196,7 +202,7 @@ static void binary() {
 }
 
 // Produces and handles literals of Nil and Boolean nature
-static void literal() {
+static void literal(bool canAssign) {
     switch (parser.previous.type)
     {
     case TOKEN_FALSE: emitByte(OP_FALSE);
@@ -212,19 +218,19 @@ static void literal() {
 }
 
 // Parses and emits bytecode for current expression inside parens
-static void grouping() {
+static void grouping(bool canAssign) {
     expression();
     consume(TOKEN_RIGHT_PAREN, "Expect ')' after expression.");
 }
 
 // Functions that push around expressions
 
-static void number() {
+static void number(bool canAssign) {
     double value = strtod(parser.previous.start, NULL);
     emitConstant(NUMBER_VAL(value));
 }
 
-static void string() {
+static void string(bool canAssign) {
     emitConstant(OBJ_VAL(
     copyString(
         parser.previous.start + 1,
@@ -233,8 +239,25 @@ static void string() {
     );
 }
 
+static void namedVariable(Token name, bool canAssign) {
+    uint8_t arg = identifierConstant(&name);
+
+    if (canAssign && match(TOKEN_EQUAL)) {
+        expression();
+        emitBytes(OP_SET_GLOBAL, arg);
+    } else {
+        emitBytes(OP_GET_GLOBAL, arg);
+    }
+
+    emitBytes(OP_GET_GLOBAL, arg);
+}
+
+static void variable(bool canAssign) {
+    namedVariable(parser.previous, canAssign);
+}
+
 // Parses and emits bytecode for a unary expression
-static void unary() {
+static void unary(bool canAssign) {
     TokenType operatorType = parser.previous.type;
 
     // Compile operand, since NEGATE follows the value
@@ -250,43 +273,43 @@ static void unary() {
 }
 
 ParseRule rules[] = {
-    //  Null-denot  Left-denot  Precedence Ranking
-    {   grouping,   NULL,       PREC_NONE},     // TOKEN_LEFT_PAREN
+    /*  Null-denot  Left-denot  Precedence Ranking  Operator-Comment*/
+    {   grouping,   NULL,       PREC_NONE},         // TOKEN_LEFT_PAREN
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_RIGHT PAREN
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_LEFT_BRACE
-    {   NULL,       NULL,       PREC_NONE},         //TOKEN_RIGHT_BRACE
+    {   NULL,       NULL,       PREC_NONE},         // TOKEN_RIGHT_BRACE
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_COMMA
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_DOT
-    {   unary,      binary,     PREC_TERM},      // TOKEN_MINUS
-    {   NULL,       binary,     PREC_TERM},       // TOKEN_PLUS
+    {   unary,      binary,     PREC_TERM},         // TOKEN_MINUS
+    {   NULL,       binary,     PREC_TERM},         // TOKEN_PLUS
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_SEMICOLON
-    {   NULL,       binary,     PREC_FACTOR},     // TOKEN_SLASH
-    {   NULL,       binary,     PREC_FACTOR},     // TOKEN_STAR
-    {   unary,      NULL,       PREC_NONE},        // TOKEN_BANG
-    {   NULL,       binary,     PREC_EQUALITY},   //TOKEN_BANG_EQUAL
+    {   NULL,       binary,     PREC_FACTOR},       // TOKEN_SLASH
+    {   NULL,       binary,     PREC_FACTOR},       // TOKEN_STAR
+    {   unary,      NULL,       PREC_NONE},         // TOKEN_BANG
+    {   NULL,       binary,     PREC_EQUALITY},     // TOKEN_BANG_EQUAL
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_EQUAL
-    {   NULL,       binary,     PREC_EQUALITY},   // TOKEN_EQUAL_EQUAL
-    {   NULL,       binary,     PREC_COMPARISON}, // TOKEN_GREATER
-    {   NULL,       binary,     PREC_COMPARISON}, // TOKEN_GREATER_EQUAL
-    {   NULL,       binary,     PREC_COMPARISON}, // TOKEN_LESS
-    {   NULL,       binary,     PREC_COMPARISON}, // TOKEN_LESS_EQUAL
-    {   NULL,       NULL,       PREC_NONE},         // TOKEN_IDENTIFIER
-    {   string,     NULL,       PREC_NONE},       // TOKEN_STRING
-    {   number,     NULL,       PREC_NONE},       // TOKEN_NUMBER
-    {   NULL,       binary,     PREC_AND},        // TOKEN_AND
+    {   NULL,       binary,     PREC_EQUALITY},     // TOKEN_EQUAL_EQUAL
+    {   NULL,       binary,     PREC_COMPARISON},   // TOKEN_GREATER
+    {   NULL,       binary,     PREC_COMPARISON},   // TOKEN_GREATER_EQUAL
+    {   NULL,       binary,     PREC_COMPARISON},   // TOKEN_LESS
+    {   NULL,       binary,     PREC_COMPARISON},   // TOKEN_LESS_EQUAL
+    {   variable,       NULL,       PREC_NONE},         // TOKEN_IDENTIFIER
+    {   string,     NULL,       PREC_NONE},         // TOKEN_STRING
+    {   number,     NULL,       PREC_NONE},         // TOKEN_NUMBER
+    {   NULL,       binary,     PREC_AND},          // TOKEN_AND
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_CLASS
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_ELSE
-    {   literal,    NULL,       PREC_NONE},      // TOKEN_FALSE
+    {   literal,    NULL,       PREC_NONE},         // TOKEN_FALSE
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_FOR
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_FUN
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_IF
-    {   literal,    NULL,       PREC_NONE},      // TOKEN_NIL
-    {   NULL,       binary,     PREC_OR},         // TOKEN_OR
+    {   literal,    NULL,       PREC_NONE},         // TOKEN_NIL
+    {   NULL,       binary,     PREC_OR},           // TOKEN_OR
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_PRINT
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_RETURN
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_SUPER
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_THIS
-    {   literal,    NULL,       PREC_NONE},      // TOKEN_TRUE
+    {   literal,    NULL,       PREC_NONE},         // TOKEN_TRUE
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_VAR
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_WHILE
     {   NULL,       NULL,       PREC_NONE},         // TOKEN_ERROR
@@ -302,12 +325,18 @@ static void parsePrecedence(Precedence precedence) {
         return;
     }
 
-    prefixRule();
+    bool canAssign = precedence <= PREC_ASSIGNMENT;
+    prefixRule(canAssign);
+
+    // prefixRule();
 
     while (precedence <= getRule(parser.current.type)->precedence) {
         advance();
         ParseFn infixRule = getRule(parser.previous.type)->infix;
-        infixRule();
+        infixRule(canAssign);
+    }
+    if (canAssign && match(TOKEN_EQUAL)) {
+        error("Invalid assignment target.");
     }
 }
 
@@ -363,8 +392,7 @@ static void synchronize(){
             case TOKEN_PRINT:
                 return;
             default:
-                //Do nothing
-                ;
+                0;
         }
 
         advance();

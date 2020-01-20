@@ -18,24 +18,31 @@ Contens:
 
 
 typedef enum {
-    OP_RETURN,
-    OP_POP,
-    OP_PRINT,
-    OP_CONSTANT,
-    OP_NIL,
-    OP_TRUE,
-    OP_FALSE,
-    OP_NEGATE,
-    OP_EQUAL,
-    OP_GREATER,
-    OP_LESS,
-    OP_NOT,
-    OP_ADD,
-    OP_SUBSTRACT,
-    OP_MULPTIPLY,
-    OP_DIVIDE,
-    OP_AND,
-    OP_OR,
+    // Stateful operators
+    OP_RETURN,          //For return statement
+    OP_DEFINE_GLOBAL,   //For defining a global element
+    OP_GET_GLOBAL,      //Pops name from stack and push value onto stack
+    OP_SET_GLOBAL,      //Sets elements on stack
+    OP_POP,             //Pops an operator off stack to ensure stack effect := 0
+    OP_PRINT,           //Print a variable
+    //Literals
+    OP_CONSTANT,        //Pushses a constant onto the stack
+    OP_NIL,             //Pushes a nil value onto the stack
+    OP_TRUE,            //Pushes a true boolean onto the stack
+    OP_FALSE,           //Pushes a false boolean onto the stack
+    // Numeric operators
+    OP_NEGATE,          //Pops constant and pushes it's numeric negation onto the stack
+    OP_EQUAL,           //Pop two constants and compare them
+    OP_GREATER,         //Pop two constants and compares them numerically to see if a > b
+    OP_LESS,            //Pops two constants and compares them
+    OP_ADD,             //Pops two constants, pushes sum onto stack
+    OP_SUBSTRACT,       //Pops two constants, pushes difference onto stack
+    OP_MULPTIPLY,       //Pops two constants, pushes their multiplication onto stack
+    OP_DIVIDE,          //Pops two constants, pushes their dividend onto stack
+    // Logical 
+    OP_NOT,             //Pops constants and pushes it's logical negation onto stack
+    OP_AND,             //Pops two constants, pushes logical `and` onto stack
+    OP_OR,              //Pops two constants, pushes logical `or` onto stack
 }   OpCode;
 
 // Dynamic Array Chunks
