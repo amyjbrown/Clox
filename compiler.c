@@ -93,6 +93,8 @@ static void consume(TokenType type, const char* message) {
     if (parser.current.type == type) {
         advance();
         return;
+    } else{
+        error("Expect semicolon.");
     }
 }
 
